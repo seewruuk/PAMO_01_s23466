@@ -29,4 +29,9 @@ Po obliczeniu BMI, aplikacja wyświetla wynik wraz z odpowiednią interpretacją
 - **MainActivity.java:** Główna aktywność aplikacji, która zawiera logikę obliczania BMI oraz obsługę interfejsu.
 
 
+![Zrzut ekranu 2025-03-20 210552](https://github.com/user-attachments/assets/3b856753-1b20-421c-a459-c0a59679e10e)
+
+![Zrzut ekranu 2025-03-20 210607](https://github.com/user-attachments/assets/9a344324-3cfd-4a13-a63f-0b7454aeb383)
+
+![Zrzut ekranu 2025-03-20 210620](https://github.com/user-attachments/assets/624b3912-87bd-429c-a49f-818734a54f75)
 
