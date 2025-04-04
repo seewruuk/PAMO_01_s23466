@@ -1,32 +1,16 @@
-# Kalkulator BMI
+# Zjazd 2: Kalkulator Kalorii i BMI
 
 **Autor: Kacper Sewruk s23466**
 
 ## Opis projektu
 
-Aplikacja **Kalkulator BMI** to prosta aplikacja mobilna stworzona w Android Studio przy użyciu języka Java. 
-Jej głównym zadaniem jest obliczenie wskaźnika BMI (Body Mass Index) na podstawie danych wejściowych: masy ciała (w kg) oraz wzrostu (w metrach). 
-Po obliczeniu BMI, aplikacja wyświetla wynik wraz z odpowiednią interpretacją:
+Aplikacja **Kalkulator Kalorii i BMI** to rozbudowana aplikacja mobilna stworzona w Android Studio przy użyciu języka Java. Projekt łączy w sobie następujące funkcjonalności:
 
-- **niedowaga**
-- **optimum**
-- **nadwaga**
-- **otyłość**
+- **Ekran startowy:** Wyświetla włąsną grafike.
+- **Kalkulator BMI:** Użytkownik wprowadza wagę i wzrost, a aplikacja oblicza wskaźnik BMI i wyświetla interpretację (niedowaga, optimum, nadwaga, otyłość).
+- **Kalkulator dziennego zapotrzebowania kalorycznego:** Na podstawie wzoru Harris-Benedicta (dla uproszczenia przyjęto męską wersję) oraz danych (wiek, waga, wzrost i poziom aktywności) aplikacja oblicza dzienne zapotrzebowanie kaloryczne.
+- **Rekomendacje kulinarne:** W zależności od obliczonego zapotrzebowania kalorycznego, aplikacja losowo wybiera 2 przepisy z odpowiednio przygotowanych list (dla niższego i wyższego zapotrzebowania).
 
-## Funkcjonalności
-
-- **Wprowadzanie danych:** Użytkownik wpisuje swoją masę oraz wzrost.
-- **Obliczanie BMI:** Aplikacja liczy wartość BMI używając wzoru: BMI = masa / (wzrost * wzrost)
-
-
-- **Wyświetlanie wyniku:** Wynik oraz interpretacja (status) są prezentowane na ekranie.
-- **Obsługa błędów:** Aplikacja sprawdza, czy pola zostały poprawnie wypełnione oraz czy wzrost nie jest równy zeru.
-
-## Struktura projektu
-
-- **AndroidManifest.xml:** Plik konfiguracyjny, definiujący główną aktywność.
-- **activity_main.xml:** Layout interfejsu użytkownika zawierający EditText (dla masy i wzrostu), Button (do obliczeń) oraz TextView (do wyświetlania wyniku).
-- **MainActivity.java:** Główna aktywność aplikacji, która zawiera logikę obliczania BMI oraz obsługę interfejsu.
 
 
 
