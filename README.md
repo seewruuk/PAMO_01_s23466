@@ -12,10 +12,6 @@ Aplikacja **Kalkulator Kalorii i BMI** to rozbudowana aplikacja mobilna stworzon
 - **Rekomendacje kulinarne:** W zależności od obliczonego zapotrzebowania kalorycznego, aplikacja losowo wybiera 2 przepisy z odpowiednio przygotowanych list (dla niższego i wyższego zapotrzebowania).
 
 
+![image](https://github.com/user-attachments/assets/6e29462f-629b-474a-8b80-49e9484fc51b)
 
-![Zrzut ekranu 2025-03-20 210552](https://github.com/user-attachments/assets/3b856753-1b20-421c-a459-c0a59679e10e)
-
-![Zrzut ekranu 2025-03-20 210607](https://github.com/user-attachments/assets/9a344324-3cfd-4a13-a63f-0b7454aeb383)
-
-![Zrzut ekranu 2025-03-20 210620](https://github.com/user-attachments/assets/624b3912-87bd-429c-a49f-818734a54f75)
 
