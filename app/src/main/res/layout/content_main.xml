@@ -4,33 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/editTextMasa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Wpisz masę w kg"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="247dp" />
-    ... />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:id="@+id/editTextWzrost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Wpisz wzrost w kg"
-        tools:layout_editor_absoluteX="128dp"
-        tools:layout_editor_absoluteY="322dp" />
+        android:hint="Wpisz wzrost w cm"
+        app:layout_constraintTop_toBottomOf="@id/editTextMasa"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="164dp"
-        tools:layout_editor_absoluteY="393dp" />
-    ... />
+        android:text="Oblicz BMI"
+        app:layout_constraintTop_toBottomOf="@id/editTextWzrost"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

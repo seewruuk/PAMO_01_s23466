@@ -13,8 +13,8 @@
     <string-array name="activity_levels">
         <item>Brak ruchu</item>
         <item>1 raz w tygodniu</item>
-        <item>2-3 razy w tygodniu</item>
-        <item>4-5 razy w tygodniu</item>
+        <item>2 do 3 razy w tygodniu</item>
+        <item>4 do 5 razy w tygodniu</item>
         <item>Codziennie</item>
     </string-array>
 

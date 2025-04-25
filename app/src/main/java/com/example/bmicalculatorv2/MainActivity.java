@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         double dailyCalories = bmr * activityFactor;
         textViewCalorieResult.setText(String.format("Dzienne zapotrzebowanie kaloryczne: %.0f kcal", dailyCalories));
 
-        String recommendations = getRecipeRecommendations(dailyCalories);
+        String recommendations = RecipeHelper.getRecipeRecommendations(dailyCalories);
         textViewRecipes.setText(recommendations);
     }
 
@@ -123,40 +123,14 @@ public class MainActivity extends AppCompatActivity {
                 return 1.2;
             case "1 raz w tygodniu":
                 return 1.375;
-            case "2-3 razy w tygodniu":
+            case "2 do 3 razy w tygodniu":
                 return 1.55;
-            case "4-5 razy w tygodniu":
+            case "4 do 5 razy w tygodniu":
                 return 1.725;
             case "Codziennie":
                 return 1.9;
             default:
                 return 1.2;
         }
-    }
-
-    /**
-     * Metoda getRecipeRecommendations wybiera losowo 2 przepisy z odpowiedniej listy w zależności
-     * od dziennego zapotrzebowania kalorycznego.
-     */
-    private String getRecipeRecommendations(double dailyCalories) {
-        List<String> lowCalRecipes = new ArrayList<>();
-        lowCalRecipes.add("Sałatka z grillowanym kurczakiem i warzywami");
-        lowCalRecipes.add("Zupa krem z brokułów");
-        lowCalRecipes.add("Quinoa z warzywami i tofu");
-
-        List<String> highCalRecipes = new ArrayList<>();
-        highCalRecipes.add("Makaron carbonara z boczkiem");
-        highCalRecipes.add("Burger z wołowiną i frytkami");
-        highCalRecipes.add("Pizza z podwójnym serem");
-
-        List<String> selectedRecipes = dailyCalories < 2000 ? lowCalRecipes : highCalRecipes;
-
-        Collections.shuffle(selectedRecipes, new Random());
-        int numberOfRecipes = Math.min(2, selectedRecipes.size());
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberOfRecipes; i++) {
-            sb.append("- ").append(selectedRecipes.get(i)).append("\n");
-        }
-        return sb.toString();
     }
 }
