@@ -104,5 +104,20 @@
             android:text="Przepisy pojawią się tutaj..."
             android:layout_marginTop="8dp" />
 
+        <TextView
+            android:id="@+id/textViewShoppingCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lista zakupów (Sałatka z kurczakiem):"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewShopping"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
+
     </LinearLayout>
 </ScrollView>

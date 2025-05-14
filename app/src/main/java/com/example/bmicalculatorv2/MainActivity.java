@@ -1,10 +1,11 @@
 package com.example.bmicalculatorv2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,20 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 /**
  * MainActivity - główna aktywność aplikacji.
- *
- * Funkcjonalności:
- * 1. Wyświetla ekran startowy z grafiką.
- * 2. Kalkulator BMI – oblicza BMI na podstawie wagi i wzrostu oraz wyświetla interpretację.
- * 3. Kalkulator dziennego zapotrzebowania kalorycznego – oblicza BMR wg wzoru Harris-Benedicta
- *    (dla uproszczenia przyjęto męską wersję) i mnoży przez współczynnik aktywności.
- * 4. Rekomendacje kulinarne – na podstawie dziennego zapotrzebowania losowo wybiera 2 przepisy
- *    z przygotowanych list (różne przepisy w zależności od wyniku kalorycznego).
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -34,14 +26,16 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerActivity;
     private Button buttonOblicz;
     private TextView textViewBMIResult, textViewCalorieResult, textViewRecipes;
+    private RecyclerView recyclerViewShopping;
+    private ShoppingListAdapter shoppingListAdapter;
+    private List<ShoppingItem> shoppingItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-
+        // init UI
         imageViewSplash = findViewById(R.id.imageViewSplash);
         editTextMasa = findViewById(R.id.editTextMasa);
         editTextWzrost = findViewById(R.id.editTextWzrost);
@@ -51,9 +45,14 @@ public class MainActivity extends AppCompatActivity {
         textViewBMIResult = findViewById(R.id.textViewBMIResult);
         textViewCalorieResult = findViewById(R.id.textViewCalorieResult);
         textViewRecipes = findViewById(R.id.textViewRecipes);
+        recyclerViewShopping = findViewById(R.id.recyclerViewShopping);
 
-
-
+        // setup RecyclerView
+        recyclerViewShopping.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewShopping.setHasFixedSize(false);
+        shoppingItems = new ArrayList<>();
+        shoppingListAdapter = new ShoppingListAdapter(shoppingItems);
+        recyclerViewShopping.setAdapter(shoppingListAdapter);
 
         buttonOblicz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Metoda calculateAndDisplayResults pobiera dane z pól, oblicza BMI oraz dzienne
-     * zapotrzebowanie kaloryczne, a następnie na podstawie wyniku kalorycznego losowo wybiera
-     * rekomendacje kulinarne.
-     */
     private void calculateAndDisplayResults() {
         String masaStr = editTextMasa.getText().toString();
         String wzrostStr = editTextWzrost.getText().toString();
@@ -78,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             textViewBMIResult.setText("Proszę wpisać wagę, wzrost oraz wiek.");
             textViewCalorieResult.setText("");
             textViewRecipes.setText("");
+            shoppingItems.clear();
+            shoppingListAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -90,47 +86,39 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Obliczenie BMI
         double bmi = masa / (wzrost * wzrost);
-        String bmiStatus;
-        if (bmi < 18.5) {
-            bmiStatus = "niedowaga";
-        } else if (bmi < 25) {
-            bmiStatus = "optimum";
-        } else if (bmi < 30) {
-            bmiStatus = "nadwaga";
-        } else {
-            bmiStatus = "otyłość";
-        }
-        textViewBMIResult.setText(String.format("BMI: %.2f (%s)", bmi, bmiStatus));
+        String status = bmi < 18.5 ? "niedowaga" :
+                bmi < 25   ? "optimum" :
+                        bmi < 30   ? "nadwaga" : "otyłość";
+        textViewBMIResult.setText(String.format("BMI: %.2f (%s)", bmi, status));
 
         double wzrostCm = wzrost * 100;
-        double bmr = 66.47 + (13.75 * masa) + (5.003 * wzrostCm) - (6.755 * age);
-        double activityFactor = getActivityFactor(activityLevel);
-        double dailyCalories = bmr * activityFactor;
+        double bmr = 66.47 + 13.75 * masa + 5.003 * wzrostCm - 6.755 * age;
+        double factor = getActivityFactor(activityLevel);
+        double dailyCalories = bmr * factor;
         textViewCalorieResult.setText(String.format("Dzienne zapotrzebowanie kaloryczne: %.0f kcal", dailyCalories));
 
-        String recommendations = RecipeHelper.getRecipeRecommendations(dailyCalories);
-        textViewRecipes.setText(recommendations);
+        List<String> recipes = RecipeHelper.getRecipes(dailyCalories);
+        String recText = RecipeHelper.getRecommendationsText(recipes);
+        textViewRecipes.setText(recText);
+
+        String chosen = recipes.get(new Random().nextInt(recipes.size()));
+
+        shoppingItems.clear();
+        for (String ing : RecipeHelper.getIngredientsFor(chosen)) {
+            shoppingItems.add(new ShoppingItem(ing));
+        }
+        shoppingListAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Metoda getActivityFactor zwraca współczynnik aktywności na podstawie wybranej opcji.
-     */
-    private double getActivityFactor(String activityLevel) {
-        switch (activityLevel) {
-            case "Brak ruchu":
-                return 1.2;
-            case "1 raz w tygodniu":
-                return 1.375;
-            case "2 do 3 razy w tygodniu":
-                return 1.55;
-            case "4 do 5 razy w tygodniu":
-                return 1.725;
-            case "Codziennie":
-                return 1.9;
-            default:
-                return 1.2;
+    private double getActivityFactor(String level) {
+        switch (level) {
+            case "Brak ruchu": return 1.2;
+            case "1 raz w tygodniu": return 1.375;
+            case "2 do 3 razy w tygodniu": return 1.55;
+            case "4 do 5 razy w tygodniu": return 1.725;
+            case "Codziennie": return 1.9;
+            default: return 1.2;
         }
     }
 }
