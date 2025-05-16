@@ -1,4 +1,4 @@
-# Zjazd 2: Kalkulator Kalorii i BMI
+# Kalkulator Kalorii i BMI
 
 **Autor: Kacper Sewruk s23466**
 
@@ -12,6 +12,8 @@ Aplikacja **Kalkulator Kalorii i BMI** to rozbudowana aplikacja mobilna stworzon
 - **Rekomendacje kulinarne:** W zależności od obliczonego zapotrzebowania kalorycznego, aplikacja losowo wybiera 2 przepisy z odpowiednio przygotowanych list (dla niższego i wyższego zapotrzebowania).
 
 
-![image](https://github.com/user-attachments/assets/6e29462f-629b-474a-8b80-49e9484fc51b)
+![image](https://github.com/user-attachments/assets/b89246a2-93cb-4a32-8f7e-ee5e5763ab77)
+![image](https://github.com/user-attachments/assets/c6b5b8f4-43b1-42bd-a0eb-2882da6d06c1)
+
 
 
