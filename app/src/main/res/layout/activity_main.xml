@@ -119,5 +119,13 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"/>
 
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChartBMI"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp"/>
+
+
+
     </LinearLayout>
 </ScrollView>

@@ -3,6 +3,7 @@ package com.example.bmicalculatorv2;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.Locale;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewShopping;
     private ShoppingListAdapter shoppingListAdapter;
     private List<ShoppingItem> shoppingItems;
+    private LineChart lineChartBMI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         textViewCalorieResult = findViewById(R.id.textViewCalorieResult);
         textViewRecipes = findViewById(R.id.textViewRecipes);
         recyclerViewShopping = findViewById(R.id.recyclerViewShopping);
+        lineChartBMI = findViewById(R.id.lineChartBMI);
 
         // setup RecyclerView
         recyclerViewShopping.setLayoutManager(new LinearLayoutManager(this));
@@ -58,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 calculateAndDisplayResults();
+                setupMockedBmiChart();
             }
         });
     }
@@ -90,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
         String status = bmi < 18.5 ? "niedowaga" :
                 bmi < 25   ? "optimum" :
                         bmi < 30   ? "nadwaga" : "otyłość";
-        textViewBMIResult.setText(String.format("BMI: %.2f (%s)", bmi, status));
+        textViewBMIResult.setText(String.format(Locale.getDefault(), "BMI: %.2f (%s)", bmi, status));
 
         double wzrostCm = wzrost * 100;
         double bmr = 66.47 + 13.75 * masa + 5.003 * wzrostCm - 6.755 * age;
         double factor = getActivityFactor(activityLevel);
         double dailyCalories = bmr * factor;
-        textViewCalorieResult.setText(String.format("Dzienne zapotrzebowanie kaloryczne: %.0f kcal", dailyCalories));
+        textViewCalorieResult.setText(String.format(Locale.getDefault(), "Dzienne zapotrzebowanie kaloryczne: %.0f kcal", dailyCalories));
 
         List<String> recipes = RecipeHelper.getRecipes(dailyCalories);
         String recText = RecipeHelper.getRecommendationsText(recipes);
@@ -120,5 +134,50 @@ public class MainActivity extends AppCompatActivity {
             case "Codziennie": return 1.9;
             default: return 1.2;
         }
+    }
+
+    private void setupMockedBmiChart() {
+        // Zamockowane dane (LinkedHashMap zachowuje kolejność)
+        Map<String, Float> bmiHistory = new LinkedHashMap<>();
+        bmiHistory.put("01.05", 22.1f);
+        bmiHistory.put("02.05", 22.4f);
+        bmiHistory.put("03.05", 22.3f);
+        bmiHistory.put("04.05", 22.6f);
+        bmiHistory.put("05.05", 22.7f);
+        bmiHistory.put("06.05", 22.5f);
+        bmiHistory.put("07.05", 22.8f);
+
+        List<Entry> entries = new ArrayList<>();
+        final List<String> xLabels = new ArrayList<>();
+        int index = 0;
+        for (Map.Entry<String, Float> entry : bmiHistory.entrySet()) {
+            entries.add(new Entry(index, entry.getValue()));
+            xLabels.add(entry.getKey());
+            index++;
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "BMI w czasie");
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleRadius(4f);
+        dataSet.setDrawValues(false);
+
+        LineData lineData = new LineData(dataSet);
+        lineChartBMI.setData(lineData);
+        lineChartBMI.getDescription().setText("Zmiany BMI (mock)");
+        lineChartBMI.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int idx = (int) value;
+                if (idx >= 0 && idx < xLabels.size()) {
+                    return xLabels.get(idx);
+                } else {
+                    return "";
+                }
+            }
+        });
+        lineChartBMI.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChartBMI.getXAxis().setGranularity(1f);
+        lineChartBMI.getAxisRight().setEnabled(false);
+        lineChartBMI.invalidate(); // odświeżenie
     }
 }

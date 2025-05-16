@@ -94,6 +94,31 @@ public class RecipeHelper {
      * Zwraca listę składników dla zadanego przepisu.
      */
     public static List<String> getIngredientsFor(String recipeName) {
-        return INGREDIENTS_MAP.getOrDefault(recipeName, List.of());
+        if (INGREDIENTS_MAP.containsKey(recipeName)) {
+            return INGREDIENTS_MAP.get(recipeName);
+        } else {
+            return new ArrayList<>();
+        }
     }
+
+    public static String getRecipeRecommendations(int calories) {
+        List<String> pool;
+        if (calories < 2000) {
+            pool = new ArrayList<>(List.of(
+                    "Sałatka z grillowanym kurczakiem i warzywami",
+                    "Zupa krem z brokułów",
+                    "Quinoa z warzywami i tofu"
+            ));
+        } else {
+            pool = new ArrayList<>(List.of(
+                    "Makaron carbonara z boczkiem",
+                    "Burger z wołowiną i frytkami",
+                    "Pizza z podwójnym serem"
+            ));
+        }
+
+        Collections.shuffle(pool, new Random());
+        return pool.get(0) + "\n" + pool.get(1);
+    }
+
 }
